@@ -1,5 +1,6 @@
 import 'package:calendar_flutter/page/createEvent_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 void main() {
@@ -39,108 +40,82 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const GNav(
-          backgroundColor: Colors.grey,
+      bottomNavigationBar: BottomAppBar(
+          notchMargin: 10,
+          shape: CircularNotchedRectangle(),
           color: Colors.white,
-          activeColor: Colors.purple,
-          tabs: [
-            GButton(
-              icon: Icons.calendar_today,
-              text: 'Calendar',
+          child: IconTheme(
+            data: IconThemeData(color: Colors.grey),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  isSelected: isCalendar,
+                  tooltip: 'Calendar',
+                  icon: SvgPicture.asset('assets/icons/ic_calendar.svg'),
+                  selectedIcon: SvgPicture.asset('assets/icons/ic_calendar.svg',
+                    color: Colors.purple,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isCalendar = true;
+                      isTodayjob = false;
+                      isNotification = false;
+                      isPersonalSetting = false;
+                    });
+                  },
+                ),
+                IconButton(
+                  isSelected: isTodayjob,
+                  tooltip: 'Today Job',
+                  icon: SvgPicture.asset('assets/icons/ic_clock.svg'),
+                  selectedIcon: SvgPicture.asset('assets/icons/ic_clock.svg',
+                    color: Colors.purple,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isCalendar = false;
+                      isTodayjob = true;
+                      isNotification = false;
+                      isPersonalSetting = false;
+                    });
+                  },
+                ),
+                IconButton(
+                  isSelected: isNotification,
+                  tooltip: 'Notifications',
+                  icon: SvgPicture.asset('assets/icons/ic_notification.svg'),
+                  selectedIcon: SvgPicture.asset('assets/icons/ic_notification.svg',
+                    color: Colors.purple,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isCalendar = false;
+                      isTodayjob = false;
+                      isNotification = true;
+                      isPersonalSetting = false;
+                    });
+                  },
+                ),
+                IconButton(
+                  isSelected: isPersonalSetting,
+                  tooltip: 'Personal Setting',
+                  icon: SvgPicture.asset('assets/icons/ic_user.svg'),
+                  selectedIcon: SvgPicture.asset('assets/icons/ic_user.svg',
+                    color: Colors.purple,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isCalendar = false;
+                      isTodayjob = false;
+                      isNotification = false;
+                      isPersonalSetting = true;
+                    });
+                  },
+                ),
+              ],
             ),
-            GButton(
-              icon: Icons.alarm,
-              text: 'Today Job',
-            ),
-            GButton(
-              icon: Icons.notifications,
-              text: 'Notifications',
-            ),
-            GButton(
-              icon: Icons.person,
-              text: 'Setting',
-            ),
-          ]),
-      // bottomNavigationBar: BottomAppBar(
-      //     notchMargin: 10,
-      //     shape: CircularNotchedRectangle(),
-      //     color: Colors.white,
-      //     child: IconTheme(
-      //       data: IconThemeData(color: Colors.grey),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           IconButton(
-      //             isSelected: isCalendar,
-      //             tooltip: 'Calendar',
-      //             icon: Image.asset('assets/icons/ic_calendar.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_calendar.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = true;
-      //                 isTodayjob = false;
-      //                 isNotification = false;
-      //                 isPersonalSetting = false;
-      //               });
-      //             },
-      //           ),
-      //           IconButton(
-      //             isSelected: isTodayjob,
-      //             tooltip: 'Today Job',
-      //             icon: Image.asset('assets/icons/ic_clock.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_clock.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = false;
-      //                 isTodayjob = true;
-      //                 isNotification = false;
-      //                 isPersonalSetting = false;
-      //               });
-      //             },
-      //           ),
-      //           IconButton(
-      //             isSelected: isNotification,
-      //             tooltip: 'Notifications',
-      //             icon: Image.asset('assets/icons/ic_notification.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_notification.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = false;
-      //                 isTodayjob = false;
-      //                 isNotification = true;
-      //                 isPersonalSetting = false;
-      //               });
-      //             },
-      //           ),
-      //           IconButton(
-      //             isSelected: isPersonalSetting,
-      //             tooltip: 'Personal Setting',
-      //             icon: Image.asset('assets/icons/ic_person.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_person.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = false;
-      //                 isTodayjob = false;
-      //                 isNotification = false;
-      //                 isPersonalSetting = true;
-      //               });
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     )),
+          )),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -171,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
           color: Colors.white,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
