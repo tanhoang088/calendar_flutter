@@ -1,6 +1,13 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:calendar_flutter/page/createEvent_page.dart';
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+
+List<IconData> iconList = [
+  Icons.calendar_today,
+  Icons.alarm,
+  Icons.notifications,
+  Icons.person
+];
 
 void main() {
   runApp(const MyApp());
@@ -30,130 +37,37 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  bool isCalendar = false;
-  bool isTodayjob = false;
-  bool isNotification = false;
-  bool isPersonalSetting = false;
+  int _bottomNavIndex = 0;
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Calendar',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+    Text(
+      'Index 1: Remind',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+    Text(
+      'Index 2: Notification',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+    Text(
+      'Index 3: User Setting',
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _bottomNavIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const GNav(
-          backgroundColor: Colors.grey,
-          color: Colors.white,
-          activeColor: Colors.purple,
-          tabs: [
-            GButton(
-              icon: Icons.calendar_today,
-              text: 'Calendar',
-            ),
-            GButton(
-              icon: Icons.alarm,
-              text: 'Today Job',
-            ),
-            GButton(
-              icon: Icons.notifications,
-              text: 'Notifications',
-            ),
-            GButton(
-              icon: Icons.person,
-              text: 'Setting',
-            ),
-          ]),
-      // bottomNavigationBar: BottomAppBar(
-      //     notchMargin: 10,
-      //     shape: CircularNotchedRectangle(),
-      //     color: Colors.white,
-      //     child: IconTheme(
-      //       data: IconThemeData(color: Colors.grey),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           IconButton(
-      //             isSelected: isCalendar,
-      //             tooltip: 'Calendar',
-      //             icon: Image.asset('assets/icons/ic_calendar.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_calendar.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = true;
-      //                 isTodayjob = false;
-      //                 isNotification = false;
-      //                 isPersonalSetting = false;
-      //               });
-      //             },
-      //           ),
-      //           IconButton(
-      //             isSelected: isTodayjob,
-      //             tooltip: 'Today Job',
-      //             icon: Image.asset('assets/icons/ic_clock.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_clock.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = false;
-      //                 isTodayjob = true;
-      //                 isNotification = false;
-      //                 isPersonalSetting = false;
-      //               });
-      //             },
-      //           ),
-      //           IconButton(
-      //             isSelected: isNotification,
-      //             tooltip: 'Notifications',
-      //             icon: Image.asset('assets/icons/ic_notification.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_notification.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = false;
-      //                 isTodayjob = false;
-      //                 isNotification = true;
-      //                 isPersonalSetting = false;
-      //               });
-      //             },
-      //           ),
-      //           IconButton(
-      //             isSelected: isPersonalSetting,
-      //             tooltip: 'Personal Setting',
-      //             icon: Image.asset('assets/icons/ic_person.png'),
-      //             selectedIcon: Image.asset(
-      //               'assets/icons/ic_person.png',
-      //               color: Colors.purple,
-      //             ),
-      //             onPressed: () {
-      //               setState(() {
-      //                 isCalendar = false;
-      //                 isTodayjob = false;
-      //                 isNotification = false;
-      //                 isPersonalSetting = true;
-      //               });
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     )),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+        child: _widgetOptions.elementAt(_bottomNavIndex),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purple,
@@ -165,13 +79,24 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (BuildContext context) => CreateEventWidget(),
           );
         },
-        tooltip: 'Increment',
         child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+          notchMargin: 20,
+          height: 100,
+          leftCornerRadius: 20,
+          rightCornerRadius: 20,
+          activeColor: Colors.purple,
+          gapLocation: GapLocation.center,
+          notchSmoothness: NotchSmoothness.verySmoothEdge,
+          backgroundColor: Colors.white,
+          icons: iconList,
+          activeIndex: _bottomNavIndex,
+          onTap: _onItemTapped),
     );
   }
 }
