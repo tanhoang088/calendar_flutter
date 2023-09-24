@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CreateEventWidget extends StatefulWidget {
   const CreateEventWidget({super.key});
@@ -51,7 +52,11 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                     borderSide: BorderSide(width: 3, color: Colors.grey),
                     borderRadius: BorderRadius.circular(15)),
                 hintText: 'Date',
-                suffixIcon: Image.asset('assets/icons/ic_calendar.png')),
+                suffixIcon: Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: SvgPicture.asset('assets/icons/ic_calendar.svg')),
+                suffixIconConstraints: BoxConstraints(maxHeight: 30, maxWidth: 30),
+                ),
           ),
           const SizedBox(height: 10),
           Row(
@@ -66,7 +71,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 BorderSide(width: 3, color: Colors.grey),
                             borderRadius: BorderRadius.circular(15)),
                         hintText: 'Start time',
-                        suffixIcon: Image.asset('assets/icons/ic_clock.png')),
+                        suffixIcon: Padding(padding: EdgeInsets.only(right: 10),
+                        child: SvgPicture.asset('assets/icons/ic_clock.svg')),
+                        suffixIconConstraints: BoxConstraints(maxHeight: 30, maxWidth: 30),),
                   ),
                 ),
               ),
@@ -80,7 +87,9 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 const BorderSide(width: 3, color: Colors.grey),
                             borderRadius: BorderRadius.circular(15)),
                         hintText: 'End time',
-                        suffixIcon: Image.asset('assets/icons/ic_clock.png')),
+                        suffixIcon: Padding(padding: EdgeInsets.only(right: 10),
+                        child: SvgPicture.asset('assets/icons/ic_clock.svg')),
+                        suffixIconConstraints: BoxConstraints(maxHeight: 30, maxWidth: 30),),
                   ),
                 ),
               ),
