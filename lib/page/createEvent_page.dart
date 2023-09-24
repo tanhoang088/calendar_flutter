@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+
+Color pickerColor = Color(0xff443a49);
+Color currentColor = Color(0xff443a49);
+
+final listCategory = <String>['Brainstorm', 'Design', 'Workout'];
+final listColor = <Color>[Colors.purple, Colors.green, Colors.blue];
 
 class CreateEventWidget extends StatefulWidget {
   const CreateEventWidget({super.key});
@@ -7,11 +14,19 @@ class CreateEventWidget extends StatefulWidget {
   State<CreateEventWidget> createState() => _CreateEventWidgetState();
 }
 
-final listCategory = <String>['Brainstorm', 'Design', 'Workout'];
-final listColor = <Color>[Colors.purple, Colors.green, Colors.blue];
-
 class _CreateEventWidgetState extends State<CreateEventWidget> {
   bool light = false;
+  final myController = TextEditingController();
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
+
+  @override
+  void dispose() {
+    myController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -89,7 +104,10 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           const SizedBox(height: 10),
           Row(
             children: [
-              const Text('Remind me'),
+              const Text(
+                'Remind me',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const Spacer(),
               Switch(
                   value: light,
@@ -132,8 +150,8 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(
-                                    Icons.circle_outlined,
-                                    size: 10,
+                                    Icons.check_circle,
+                                    size: 20,
                                     color: listColor[index],
                                   ),
                                   SizedBox(
@@ -162,11 +180,77 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                 "+ Add new",
                 style: TextStyle(
                     fontSize: 15,
+                    fontWeight: FontWeight.bold,
                     color: Colors.purple,
                     decoration: TextDecoration.underline,
                     decorationColor: Colors.purple),
               ),
-              onTap: () {},
+              onTap: () => showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        title: Text('Add New Category'),
+                        actions: <Widget>[
+                          Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  controller: myController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                            width: 3, color: Colors.grey),
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    hintText: 'Category name',
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text('Pick a color!'),
+                                            content: SingleChildScrollView(
+                                              child: ColorPicker(
+                                                pickerColor: currentColor,
+                                                onColorChanged: (Color color) {
+                                                  setState(() {
+                                                    currentColor = color;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              ElevatedButton(
+                                                child: const Text('DONE'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                  child: const Text("Pick a color"),
+                                ),
+                                ElevatedButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    if (myController.text != '') {
+                                      listCategory.add(myController.text);
+                                      listColor.add(currentColor);
+                                    }
+                                    myController.clear();
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
             ),
           ),
           const SizedBox(
