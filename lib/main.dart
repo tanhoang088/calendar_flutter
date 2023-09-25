@@ -36,39 +36,59 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   int _bottomNavIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Calendar',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    Center(
+      child: Text(
+        'Index 0: Calendar',
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      ),
     ),
-    Text(
-      'Index 1: Remind',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    Center(
+      child: Text(
+        'Index 1: Remind',
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      ),
     ),
-    Text(
-      'Index 2: Notification',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    Center(
+      child: Text(
+        'Index 2: Notification',
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      ),
     ),
-    Text(
-      'Index 3: User Setting',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+    Center(
+      child: Text(
+        'Index 3: User Setting',
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      ),
     ),
   ];
+  late TabController _tabController;
+  @override
+  void initState() {
+    _tabController = TabController(length: _widgetOptions.length, vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _bottomNavIndex = index;
+      _tabController.animateTo(index);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_bottomNavIndex),
-      ),
+      body: TabBarView(controller: _tabController, children: _widgetOptions),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.purple,
         shape: CircleBorder(),

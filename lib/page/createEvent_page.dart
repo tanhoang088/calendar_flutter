@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:intl/intl.dart';
 
 Color pickerColor = Color(0xff443a49);
 Color currentColor = Color(0xff443a49);
@@ -16,9 +17,20 @@ class CreateEventWidget extends StatefulWidget {
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
   bool light = false;
-  final myController = TextEditingController();
+  TextEditingController myController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _startTimeController = TextEditingController();
+  TextEditingController _endTimeController = TextEditingController();
+  TimeOfDay? selectedTime;
   void changeColor(Color color) {
     setState(() => pickerColor = color);
+  }
+
+  @override
+  void initState() {
+    _startTimeController.text = "";
+    _endTimeController.text = "";
+    super.initState();
   }
 
   @override
@@ -30,13 +42,13 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       height: 650,
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
+          const Text(
             'Add New Event',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
@@ -61,12 +73,33 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            readOnly: true,
+            controller: _dateController,
             decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(width: 3, color: Colors.grey),
+                    borderSide: const BorderSide(width: 3, color: Colors.grey),
                     borderRadius: BorderRadius.circular(15)),
                 hintText: 'Date',
-                suffixIcon: Image.asset('assets/icons/ic_calendar.png')),
+                suffixIcon: Icon(Icons.calendar_today)),
+            onTap: () async {
+              await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2015),
+                lastDate: DateTime(2025),
+              ).then((selectedDate) {
+                if (selectedDate != null) {
+                  _dateController.text =
+                      DateFormat('dd/MM/yyyy').format(selectedDate);
+                }
+              });
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter date.';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 10),
           Row(
@@ -75,13 +108,24 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
               Expanded(
                 child: Container(
                   child: TextFormField(
+                    controller: _startTimeController,
+                    readOnly: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide:
-                                BorderSide(width: 3, color: Colors.grey),
+                                const BorderSide(width: 3, color: Colors.grey),
                             borderRadius: BorderRadius.circular(15)),
                         hintText: 'Start time',
-                        suffixIcon: Image.asset('assets/icons/ic_clock.png')),
+                        suffixIcon: const Icon(Icons.alarm)),
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        initialTime: TimeOfDay.now(),
+                        context: context,
+                      );
+                      setState(() {
+                        _startTimeController.text = pickedTime!.format(context);
+                      });
+                    },
                   ),
                 ),
               ),
@@ -89,13 +133,24 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
               Expanded(
                 child: Container(
                   child: TextFormField(
+                    controller: _endTimeController,
+                    readOnly: true,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide:
                                 const BorderSide(width: 3, color: Colors.grey),
                             borderRadius: BorderRadius.circular(15)),
                         hintText: 'End time',
-                        suffixIcon: Image.asset('assets/icons/ic_clock.png')),
+                        suffixIcon: Icon(Icons.alarm)),
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        initialTime: TimeOfDay.now(),
+                        context: context,
+                      );
+                      setState(() {
+                        _endTimeController.text = pickedTime!.format(context);
+                      });
+                    },
                   ),
                 ),
               ),
@@ -120,7 +175,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
             ],
           ),
           const SizedBox(height: 10),
-          Align(
+          const Align(
             alignment: Alignment.centerLeft,
             child: Text(
               'Select Category',
@@ -154,7 +209,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                                     size: 20,
                                     color: listColor[index],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 5,
                                   ),
                                   Text(
@@ -176,7 +231,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
           Align(
             alignment: Alignment.centerLeft,
             child: InkWell(
-              child: Text(
+              child: const Text(
                 "+ Add new",
                 style: TextStyle(
                     fontSize: 15,
