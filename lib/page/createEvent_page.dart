@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_svg/svg.dart';
 
 Color pickerColor = Color(0xff443a49);
 Color currentColor = Color(0xff443a49);
 
 final listCategory = <String>['Brainstorm', 'Design', 'Workout'];
 final listColor = <Color>[Colors.purple, Colors.green, Colors.blue];
+
 
 class CreateEventWidget extends StatefulWidget {
   const CreateEventWidget({super.key});
@@ -100,6 +102,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
               }
               return null;
             },
+
           ),
           const SizedBox(height: 10),
           Row(
