@@ -16,6 +16,7 @@ class CreateEventWidget extends StatefulWidget {
 }
 
 class _CreateEventWidgetState extends State<CreateEventWidget> {
+  int? _expandedIndex;
   bool light = false;
   TextEditingController myController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
@@ -59,6 +60,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                   borderSide: const BorderSide(width: 3, color: Colors.grey),
                   borderRadius: BorderRadius.circular(15)),
               hintText: 'Event name*',
+              label: const Text('Event name*'),
             ),
           ),
           const SizedBox(height: 10),
@@ -69,6 +71,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                   borderSide: BorderSide(width: 3, color: Colors.grey),
                   borderRadius: BorderRadius.circular(15)),
               hintText: 'Type the note here...',
+              label: const Text('Note'),
             ),
           ),
           const SizedBox(height: 10),
@@ -79,7 +82,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                 border: OutlineInputBorder(
                     borderSide: const BorderSide(width: 3, color: Colors.grey),
                     borderRadius: BorderRadius.circular(15)),
-                hintText: 'Date',
+                label: const Text('Date'),
                 suffixIcon: Icon(Icons.calendar_today)),
             onTap: () async {
               await showDatePicker(
@@ -115,7 +118,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             borderSide:
                                 const BorderSide(width: 3, color: Colors.grey),
                             borderRadius: BorderRadius.circular(15)),
-                        hintText: 'Start time',
+                        label: const Text('Start time'),
                         suffixIcon: const Icon(Icons.alarm)),
                     onTap: () async {
                       TimeOfDay? pickedTime = await showTimePicker(
@@ -140,7 +143,7 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                             borderSide:
                                 const BorderSide(width: 3, color: Colors.grey),
                             borderRadius: BorderRadius.circular(15)),
-                        hintText: 'End time',
+                        label: const Text('End time'),
                         suffixIcon: Icon(Icons.alarm)),
                     onTap: () async {
                       TimeOfDay? pickedTime = await showTimePicker(
@@ -196,11 +199,18 @@ class _CreateEventWidgetState extends State<CreateEventWidget> {
                         width: 140,
                         child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
+                              backgroundColor: _expandedIndex == index
+                                  ? Colors.purple
+                                  : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                _expandedIndex = index;
+                              });
+                            },
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
